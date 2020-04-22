@@ -13,9 +13,13 @@
 #include <p2switches.h>
 #include <shape.h>
 #include <abCircle.h>
+#include "game_start_display.h"
+#include "lives_tracker.h"
+#include "game_end_display.h"
 
 #define GREEN_LED BIT6
 
+void move_person(u_char btns_pressed);
 
 AbRect ship_1_layer_1 = {abRectGetBounds, abRectCheck, {6,6}};
 AbRect ship_2_layer_1 = {abRectGetBounds, abRectCheck, {6,6}};
@@ -204,6 +208,7 @@ void copy_regions(Region *dest_region, Region *src_region) {
 void move_person_beginning() {
   layer_person_body.posNext.axes[0] = screenWidth/2;
   layer_person_body.posNext.axes[1] = screenHeight - 8;
+  subtract_num_lives();
 }
 
 u_char intersection_regions(Region *first_region, Region* second_region) {
@@ -284,6 +289,10 @@ void mlAdvance(MovLayer *ml, Region *fence)
  
     ml->layer->posNext = newPos;
   } /**< for ml */
+
+  if (game_num == 2) {
+    load_end_game();
+  }
 }
 
 
@@ -307,12 +316,15 @@ void main()
   p2sw_init(15);
 
   shapeInit();
+
+  load_start_game();
+  /*
   layerInit(&layer_person_body);
   layerDraw(&layer_person_body);
 
 
   layerGetBounds(&fieldLayer, &fieldFence);
-
+  */
 
   enableWDTInterrupts();      /**< enable periodic interrupt */
   or_sr(0x8);	              /**< GIE (enable interrupts) */
@@ -325,7 +337,12 @@ void main()
     }
     // P1OUT |= GREEN_LED;       //< Green led on when CPU on 
     redrawScreen = 0;
-    movLayerDraw(&mvl_person_body, &layer_person_body);
+    
+  
+    if (game_num == 1) {
+      movLayerDraw(&mvl_person_body, &layer_person_body);
+    }
+    
   }
 }
 
@@ -338,9 +355,29 @@ void wdt_c_handler()
   if (count >= 16) {
     
     char btns_pressed = p2sw_read();
-
+    switch(game_num) {
+    case 0:
+      update_start_game(btns_pressed, &layer_person_body, &fieldLayer, &fieldFence);
+      break;
+    case 1:
+      move_person(btns_pressed);
+      break;
+    case 2:
+      update_end_game(btns_pressed, &layer_person_body, &fieldLayer, &fieldFence);
+      break;
+    }
+   
     
-    switch (btns_pressed & 15) {
+    if (p2sw_read())
+      redrawScreen = 1;
+    count = 0;
+  } 
+  // P1OUT &= ~GREEN_LED;		    /**< Green LED off when cpu off */
+}
+
+
+void move_person(u_char btns_pressed) {
+ switch (btns_pressed & 15) {
       //Go up
     case 14:
       P2DIR |= GREEN_LED;
@@ -364,10 +401,4 @@ void wdt_c_handler()
     }
     
     mlAdvance(&mvl_person_body, &fieldFence);
-    
-    if (p2sw_read())
-      redrawScreen = 1;
-    count = 0;
-  } 
-  // P1OUT &= ~GREEN_LED;		    /**< Green LED off when cpu off */
 }
