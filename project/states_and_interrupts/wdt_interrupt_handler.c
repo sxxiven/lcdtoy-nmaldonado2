@@ -18,17 +18,35 @@
 #include "shape.h"
 #include "move_layer.h"
 #include "wdt_interrupt_handler.h"
-#include "shape_trial.h"
+#include "fur_elise_display.h"
+#include "find_frequency_display.h"
 
 /** Watchdog timer interrupt handler. 15 interrupts/sec */
+
 void wdt_c_handler()
 {
+  P1DIR |= BIT6;
   static short count = 0;
   //P1OUT |= GREEN_LED;		      /**< Green LED on when cpu on */
   count ++;
   if (count == 15) {
-    mlAdvance(&ml0, &fieldFence);
-    if (buttons_read()){
+    mlAdvance(&ml0_2,  &fieldFence);
+    char btn_pressed = buttons_read();
+    if (btn_pressed){
+      switch(game_num) {
+      case 1:
+	fur_elise_display(btn_pressed);
+	break;
+      case 2:
+	find_frequency_display(btn_pressed);
+	break;
+      case 3:
+	//
+	break;
+      default:
+	//
+	break;
+      }
       redrawScreen = 1;
     }
     count = 0;
@@ -37,6 +55,7 @@ void wdt_c_handler()
   // Plays game based on game_num/state.
   switch(game_num) {
   case 1:
+    
     fur_elise_sound();
     break;
   case 2:
