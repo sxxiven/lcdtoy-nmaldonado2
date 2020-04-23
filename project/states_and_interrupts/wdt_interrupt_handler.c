@@ -28,13 +28,30 @@ void wdt_c_handler()
   count ++;
   if (count == 15) {
     mlAdvance(&ml0, &fieldFence);
-    if (buttons_read())
+    if (buttons_read()){
       redrawScreen = 1;
+    }
     count = 0;
-  } 
+  }
+
+  // Plays game based on game_num/state.
+  switch(game_num) {
+  case 1:
+    fur_elise_sound();
+    break;
+  case 2:
+    find_frequency();
+    break;
+  case 3:
+    catch_red();
+    break;
+  default:
+    simon();
+    break;
+  }
+    
   // P1OUT &= ~GREEN_LED;		    /**< Green LED off when cpu off */
 }
-
 
 /*
 void __interrupt_vec(WDT_VECTOR) WDT()
