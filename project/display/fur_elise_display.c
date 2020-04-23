@@ -96,6 +96,7 @@ typedef struct key_struct{
   u_char start_descent; u_int bgr;
   struct key_struct *next;
 } key;
+
 key *keys_to_change;
 
 
@@ -114,7 +115,7 @@ key middle_key = {
   65, screenWidth,
   15, 40,
   7, COLOR_WHITE,
-  &top_key
+  0
 };
 
 key bottom_key = {
@@ -123,12 +124,13 @@ key bottom_key = {
   65, screenWidth,
   15, 40,
   7, COLOR_WHITE,
-  &middle_key
+  0
 };
 
 static void add_key(key *node) {
   if (!keys_to_change) {
     keys_to_change = node;
+    return;
   }
   node->next = keys_to_change->next;
   keys_to_change->next = node;
@@ -149,13 +151,18 @@ void display_new_piano(){
 void display_piano() {
   and_sr(~8);
   or_sr(8);
-  for (; keys_to_change; keys_to_change = keys_to_change->next) {
+  //keys_to_change = &bottom_key;
+  //u_char offset = 20;
+  while (keys_to_change) {
+    
     keys_to_change->print_key(keys_to_change->x, keys_to_change->y, keys_to_change->min_width, keys_to_change->width, keys_to_change->min_height, keys_to_change->height, keys_to_change->start_descent, keys_to_change->bgr);
+    key *prev = keys_to_change;
+    keys_to_change = keys_to_change->next;
+    prev->next = 0;
   }
-  
 }
 
-void fur_elise_display(int btn_pressed) {
+void fur_elise_display(u_char btn_pressed) {
   /*
   if ((btn_pressed & 15) == 11) {
     // display new
@@ -163,20 +170,32 @@ void fur_elise_display(int btn_pressed) {
   }
   */
   // fourth btn pressed
-  if ((btn_pressed & 15) == 7) {
+  if ((btn_pressed>>4) & 8) {
+    if (!(btn_pressed & 8)) {
+      top_key.bgr = COLOR_BLUE;
+    }
+    else {
+      top_key.bgr = COLOR_WHITE;
+    }
     add_key(&top_key);
-    top_key.bgr = COLOR_BLUE;
-  }
-  if ((btn_pressed & 15) == 11) {
-    add_key(&middle_key);
-    middle_key.bgr = COLOR_RED;
-  }
-  if ((btn_pressed & 15) == 13) {
-    add_key(&bottom_key);
-    bottom_key.bgr = COLOR_YELLOW;
   }
 
-  // add functionality if button changed
-  //if changed and btn is not pressed, turn
-  // it white
+  if ((btn_pressed>>4) & 4) {
+    if (!(btn_pressed & 4)) {
+      middle_key.bgr = COLOR_RED;
+    }
+    else {
+      middle_key.bgr = COLOR_WHITE;
+    }
+    add_key(&middle_key);
+  }
+  if ((btn_pressed>>4) & 2) {
+    if (!(btn_pressed & 2)) {
+      bottom_key.bgr = COLOR_YELLOW;
+    }
+    else {
+      bottom_key.bgr = COLOR_WHITE;
+    }
+    add_key(&bottom_key);
+  }
 }
