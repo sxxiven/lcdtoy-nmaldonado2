@@ -1,5 +1,6 @@
 //#include "move_layer.h"
 //#include "shape.h"
+#include "move_layer_struct.h"
 
 extern MovLayer ml_ball_1;
 

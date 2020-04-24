@@ -12,68 +12,70 @@
 #include <abCircle.h>
 #include "move_layer.h"
 #include "display_utils.h"
+#include "find_frequency_display.h"
 
-static Region fieldFence_3;
-
-AbRectOutline fieldOutline3 = {	/* playing field */
-  abRectOutlineGetBounds, abRectOutlineCheck,   
-  {screenWidth/2 - 5, screenHeight/2 - 5}
+Layer layer_ball_4 = {		
+  (AbShape *)&circle14,
+  {20, (screenHeight/2) - 52},
+  {0,0}, {0,0},				    
+  COLOR_RED,
+  &fieldLayer_2,
 };
 
-Layer fieldLayer_3 = {
-  (AbShape *)&fieldOutline3,
-  {(screenWidth/2), (screenHeight/2)}, /**< bit below & right of center */
-  {0,0}, {0,0},				    /* last & next pos */
-  COLOR_BLACK,
-  0
+Layer layer_ball_3 = {		
+  (AbShape *)&circle14,
+  {(screenWidth/2)+30, (screenHeight/2)-18}, 
+  {0,0}, {0,0},				    
+  COLOR_GREEN,
+  &layer_ball_4,
 };
 
-Layer layer_ball_3 = {		/**< Layer with an orange circle */
-  (AbShape *)&circle16,
-  {(screenWidth/2)+10, (screenHeight/2)+5}, /**< bit below & right of center */
-  {0,0}, {0,0},				    /* last & next pos */
-  COLOR_VIOLET,
-  &fieldLayer_3,
-};
-
-Layer layer_ball_2 = {		/**< Layer with an orange circle */
-  (AbShape *)&circle16,
-  {(screenWidth/2)+10, (screenHeight/2)+5}, /**< bit below & right of center */
-  {0,0}, {0,0},				    /* last & next pos */
-  COLOR_VIOLET,
+Layer layer_ball_2 = {		
+  (AbShape *)&circle14,
+  {20, (screenHeight/2) + 18},
+  {0,0}, {0,0},				    
+  COLOR_RED,
   &layer_ball_3,
 };
 
-Layer layer_ball_1 = {		/**< Layer with an orange circle */
-  (AbShape *)&circle16,
-  {(screenWidth/2)+10, (screenHeight/2)+5}, /**< bit below & right of center */
-  {0,0}, {0,0},				    /* last & next pos */
-  COLOR_VIOLET,
+Layer layer_ball_1 = {		
+  (AbShape *)&circle14,
+  {(screenWidth/2)+30, (screenHeight/2)+52}, 
+  {0,0}, {0,0},				    
+  COLOR_GREEN,
   &layer_ball_2,
 };
 
-
-MovLayer ml_ball_3 = {&layer_ball_3, {2,2}, 0};
-MovLayer ml_ball_2 = {&layer_ball_2, {2,2}, &ml_ball_3};
-MovLayer ml_ball_1 = {&layer_ball_1, {2,2}, &ml_ball_2};
+MovLayer ml_ball_4 = {&layer_ball_4, {2,0}, 0};
+MovLayer ml_ball_3 = {&layer_ball_3, {-2,0}, &ml_ball_4};
+MovLayer ml_ball_2 = {&layer_ball_2, {2,0}, &ml_ball_3};
+MovLayer ml_ball_1 = {&layer_ball_1, {-2,0}, &ml_ball_2};
 
 void display_new_catch_red(){
   //fill_rectangle(0,0,screenWidth,screenHeight,COLOR_GREEN);
+  //and_sr(~8);
+  
   bgColor = COLOR_WHITE;
   layerInit(&layer_ball_1);
+  //fill_rectangle(0,0,screenWidth,screenHeight, bgColor);
   layerDraw(&layer_ball_1);
-  layerGetBounds(&fieldLayer_3, &fieldFence_3);
+  layerGetBounds(&fieldLayer_2, &fieldFence);
+  //or_sr(8);
 }
 
 void change_ball_color() {
   static u_char color_pattern = 1;
-  
-  /*layer_mini_hourglass_1.color = (color_pattern) ? COLOR_ORANGE : COLOR_RED;
-  layer_mini_hourglass_2.color = (color_pattern) ? COLOR_ORANGE : COLOR_YELLOW;
-  layer_hourglass_1.color = layer_hourglass_2.color = (color_pattern) ? COLOR_BLACK : COLOR_WHITE;*/
+  layer_ball_4.color = layer_ball_2.color = (color_pattern) ? COLOR_GREEN : COLOR_RED;
+    layer_ball_3.color = layer_ball_1.color = (color_pattern) ? COLOR_RED : COLOR_GREEN;
   color_pattern = (color_pattern) ? 0 : 1; 
 }
 
 void catch_red_display(char btn_pressed) {
-  mlAdvance(&ml_ball_1, &fieldFence_3);
+  if ((btn_pressed & 1) == 0) {
+    bgColor = COLOR_BLACK;
+  }
+  else if ((btn_pressed & 4) == 0) {
+    bgColor = COLOR_WHITE;
+  }
+  mlAdvance(&ml_ball_1, &fieldFence);
 }

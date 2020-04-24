@@ -16,14 +16,8 @@
 #include "lcddraw.h"
 #include "find_frequency_display.h"
 #include "buzzer.h"
-
-static void fill_rectangle(u_char min_col, u_char min_row, u_char width, u_char height, u_int bgr) {
-  for (u_char i = min_col; i < min_col + width; i++) {
-    for (u_char j = min_row; j < min_row + height; j++) {
-      drawPixel(i,j,bgr);
-    }
-  }
-}
+#include "display_utils.h"
+key *keys_to_change;
 
 static void drawPianoBlackKey(u_char x, u_char y, u_char width, u_char height, u_char tip_width){
   u_char rounded = 0;
@@ -89,20 +83,7 @@ void middleKey(u_char x, u_char y, u_char min_width, u_char width, u_char small_
   }
 
 }
-
-
-typedef struct key_struct{
-  void (*print_key)(u_char x, u_char y, u_char min_width, u_char width, u_char small_height, u_char large_height, u_char start_descent, u_int bgr);
-  u_char x; u_char y;
-  u_char min_width; u_char width;
-  u_char min_height; u_char height;
-  u_char start_descent; u_int bgr;
-  struct key_struct *next;
-} key;
-
-key *keys_to_change;
-
-
+/*
 key top_key = {
   &topKey,
   0, 0,
@@ -129,7 +110,7 @@ key bottom_key = {
   7, COLOR_WHITE,
   0
 };
-
+*/
 static void add_key(key *node) {
   if (!keys_to_change) {
     keys_to_change = node;
@@ -167,8 +148,8 @@ void display_piano() {
 }
 
 void fur_elise_display(u_char btn_pressed) {
-  
   // fourth btn pressed
+  /*
   if ((btn_pressed>>4) & 8) {
     if (!(btn_pressed & 8)) {
       top_key.bgr = COLOR_BLUE;
@@ -196,5 +177,5 @@ void fur_elise_display(u_char btn_pressed) {
       bottom_key.bgr = COLOR_WHITE;
     }
     add_key(&bottom_key);
-  }
+    }*/
 }
