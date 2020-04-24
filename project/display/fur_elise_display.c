@@ -7,12 +7,15 @@
  *  is turned off along with the green LED.
  */  
 #include <msp430.h>
+#include "libTimer.h"
 #include <lcdutils.h>
 #include "shape.h"
 #include <abCircle.h>
 #include "move_layer.h"
 #include "fur_elise_display.h"
 #include "lcddraw.h"
+#include "find_frequency_display.h"
+#include "buzzer.h"
 
 static void fill_rectangle(u_char min_col, u_char min_row, u_char width, u_char height, u_int bgr) {
   for (u_char i = min_col; i < min_col + width; i++) {
@@ -138,6 +141,7 @@ static void add_key(key *node) {
 
 
 void display_new_piano(){
+  buzzer_set_period(0,0);
   fill_rectangle(0,0,screenWidth,screenHeight, COLOR_GRAY);
  topKey(0,0,65,screenWidth,20,35,7,COLOR_WHITE);
   drawPianoBlackKey(0,35,30,65, 10);
@@ -163,12 +167,7 @@ void display_piano() {
 }
 
 void fur_elise_display(u_char btn_pressed) {
-  /*
-  if ((btn_pressed & 15) == 11) {
-    // display new
-    return;
-  }
-  */
+  
   // fourth btn pressed
   if ((btn_pressed>>4) & 8) {
     if (!(btn_pressed & 8)) {

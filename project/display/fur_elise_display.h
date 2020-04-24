@@ -15,6 +15,6 @@ extern AbRect rect10;
 extern AbRArrow rightArrow;
 extern AbRectOutline fieldOutline;
 */
-void fur_elise_display(int btn_pressed);
+void fur_elise_display(u_char btn_pressed);
 void display_piano();
 void display_new_piano();
