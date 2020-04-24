@@ -56,8 +56,8 @@ void buttons_init()
   buttons_update_interrupt_sense();
 }
 
-unsigned int buttons_read() {
-  unsigned int sw_changed = switches_current ^ switches_last_reported;
+unsigned char buttons_read() {
+  unsigned char sw_changed = switches_current ^ switches_last_reported;
   switches_last_reported = switches_current;
-  return switches_current | (sw_changed << 8);
+  return switches_current | (sw_changed << 4);
 }

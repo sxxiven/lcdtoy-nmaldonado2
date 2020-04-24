@@ -21,5 +21,5 @@ void buttons_init();
 // For example if sensing low to high, then
 // sense high to low.
 void buttons_update_interrupt_sense();
-unsigned int buttons_read();
+unsigned char buttons_read();
 #endif // included
