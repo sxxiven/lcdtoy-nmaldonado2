@@ -21,6 +21,56 @@
 #include "fur_elise_display.h"
 #include "find_frequency_display.h"
 
+
+void display_new_game() {
+switch(game_num) {
+    case 1:
+      display_new_piano();
+      break;
+    case 2:
+      display_new_find_frequency();
+      break;
+    case 3:
+      //
+      break;
+    default:
+      //
+      break;
+    }
+ redrawScreen = 1;
+}
+
+
+void display_game() {
+  mlAdvance(&ml0_2,  &fieldFence);
+  static u_char curr_game = 1;
+  if (game_num != curr_game) {
+    display_new_game();
+    curr_game = game_num;
+    return;
+  }
+  
+  u_char btn_pressed = buttons_read();
+  if (btn_pressed & 240){
+    switch(game_num) {
+    case 1:
+      fur_elise_display(btn_pressed);
+      break;
+    case 2:
+      find_frequency_display(btn_pressed);
+      break;
+    case 3:
+      //
+      break;
+    default:
+      //
+      break;
+    }
+    redrawScreen = 1;
+  }
+}
+
+
 /** Watchdog timer interrupt handler. 15 interrupts/sec */
 
 void wdt_c_handler()
@@ -30,25 +80,7 @@ void wdt_c_handler()
   //P1OUT |= GREEN_LED;		      /**< Green LED on when cpu on */
   count ++;
   if (count == 15) {
-    mlAdvance(&ml0_2,  &fieldFence);
-    char btn_pressed = buttons_read();
-    if (btn_pressed){
-      switch(game_num) {
-      case 1:
-	fur_elise_display(btn_pressed);
-	break;
-      case 2:
-	find_frequency_display(btn_pressed);
-	break;
-      case 3:
-	//
-	break;
-      default:
-	//
-	break;
-      }
-      redrawScreen = 1;
-    }
+    display_game();
     count = 0;
   }
 
@@ -71,33 +103,3 @@ void wdt_c_handler()
     
   // P1OUT &= ~GREEN_LED;		    /**< Green LED off when cpu off */
 }
-
-/*
-void __interrupt_vec(WDT_VECTOR) WDT()
-{
-  // Plays game based on game_num/state.
-  switch(game_num) {
-  case 1:
-    fur_elise_sound();
-    break;
-  case 2:
-    find_frequency();
-    break;
-  case 3:
-    catch_red();
-    break;
-  default:
-    simon();
-    break;
-  }
-}
-*/
-
-/*
- * Function that moves based on the clock
- * and has 250 interrupts/sec. Based on the
- * game_num, the corresponding state/game
- * is played.
- * Input: None.
- * Output: None.
- */
