@@ -28,6 +28,7 @@ switch(game_num) {
       display_new_piano();
       break;
     case 2:
+      keys_to_change = 0;
       display_new_find_frequency();
       break;
     case 3:
@@ -42,7 +43,6 @@ switch(game_num) {
 
 
 void display_game() {
-  mlAdvance(&ml0_2,  &fieldFence);
   static u_char curr_game = 1;
   if (game_num != curr_game) {
     display_new_game();
@@ -51,7 +51,7 @@ void display_game() {
   }
   
   u_char btn_pressed = buttons_read();
-  if (btn_pressed & 240){
+  if ((btn_pressed & 240) || game_num != 1){
     switch(game_num) {
     case 1:
       fur_elise_display(btn_pressed);
@@ -75,7 +75,6 @@ void display_game() {
 
 void wdt_c_handler()
 {
-  P1DIR |= BIT6;
   static short count = 0;
   //P1OUT |= GREEN_LED;		      /**< Green LED on when cpu on */
   count ++;

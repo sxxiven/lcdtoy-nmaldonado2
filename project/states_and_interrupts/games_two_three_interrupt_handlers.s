@@ -53,10 +53,10 @@ jt:
 	.word default			;8
 	.word default			;9
 	.word default			;10
-	.word default			;11
+	.word case_eleven			;11
 	.word default			;12
 	.word default			;13
-	.word default			;14
+	.word case_fourteen			;14
 	.word case_fifteen			;15
 
 	.global game_two_interrupt_handler
@@ -73,6 +73,11 @@ case_seven:
 case_fifteen:
 	call #turn_off_green_red ;If no buttons are pressed, turn off leds.
 	jmp end_game_two
+case_eleven:
+	call #change_motion
+	jmp default
+case_fourteen:
+	call #change_color
 default:	
 	mov.b #0xf, r12
 	and.b &P2IN, r12

@@ -19,7 +19,7 @@ all:
 	(cd ../lcdLib && make libLcd.a)
 
 #additional rules for files
-blinky_buzzy_toy.elf: ${COMMON_OBJECTS} states_and_interrupts/state_machine_interrupt_handlers.o game_utils/led.o games/catch_red.o game_utils/buzzer.o game_utils/buttons.o states_and_interrupts/p2_interrupt_handler.o states_and_interrupts/wdt_interrupt_handler.o games/simon.o games/find_frequency.o games/fur_elise.o move_layer.o ../lib/libTimer.a states_and_interrupts/games_two_three_interrupt_handlers.o states_and_interrupts/wdt_handler.o ../lcdLib/lcdutils.o display/fur_elise_display.o display/find_frequency_display.o blinky_buzzy_toy.o ../shapeLib/libShape.a ../circleLib/libCircle.a ../lcdLib/libLcd.a custom_shape/hourglass.o
+blinky_buzzy_toy.elf: ${COMMON_OBJECTS} states_and_interrupts/state_machine_interrupt_handlers.o game_utils/led.o games/catch_red.o game_utils/buzzer.o game_utils/buttons.o states_and_interrupts/p2_interrupt_handler.o states_and_interrupts/wdt_interrupt_handler.o games/simon.o games/find_frequency.o games/fur_elise.o move_layer.o ../lib/libTimer.a states_and_interrupts/games_two_three_interrupt_handlers.o states_and_interrupts/wdt_handler.o ../lcdLib/lcdutils.o display/fur_elise_display.o display/find_frequency_display.o blinky_buzzy_toy.o ../shapeLib/libShape.a ../circleLib/libCircle.a custom_shape/hourglass.o display/display_utils.o ../lcdLib/libLcd.a
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
 
 load: blinky_buzzy_toy.elf
