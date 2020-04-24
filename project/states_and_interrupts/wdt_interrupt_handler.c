@@ -20,7 +20,7 @@
 #include "wdt_interrupt_handler.h"
 #include "fur_elise_display.h"
 #include "find_frequency_display.h"
-
+#include "catch_red_display.h"
 
 void display_new_game() {
 switch(game_num) {
@@ -32,13 +32,12 @@ switch(game_num) {
       display_new_find_frequency();
       break;
     case 3:
-      //
+      display_new_catch_red();
       break;
     default:
       //
       break;
     }
- redrawScreen = 1;
 }
 
 
@@ -47,6 +46,8 @@ void display_game() {
   if (game_num != curr_game) {
     display_new_game();
     curr_game = game_num;
+    redrawScreen = 0;
+    //redrawScreen = 1;
     return;
   }
   
@@ -60,7 +61,7 @@ void display_game() {
       find_frequency_display(btn_pressed);
       break;
     case 3:
-      //
+      catch_red_display(btn_pressed);
       break;
     default:
       //
