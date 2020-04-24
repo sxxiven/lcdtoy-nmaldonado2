@@ -14,8 +14,8 @@
 #include "fur_elise_display.h"
 #include "hourglass.h"
 
-const ab_hourglass hourglass = {ab_hourglass_get_bounds, ab_hourglass_check, {12, 15}, 3};
-
+const ab_hourglass hourglass = {ab_hourglass_get_bounds, ab_hourglass_check, {12, 17}, 3};
+const ab_hourglass hourglass_mini = {ab_hourglass_get_bounds, ab_hourglass_check, {10, 15}, 0};
 AbRect rect11 = {abRectGetBounds, abRectCheck, {10,10}}; /**< 10x10 rectangle */
 AbRArrow rightArrow2 = {abRArrowGetBounds, abRArrowCheck, 30};
 
@@ -32,15 +32,24 @@ Layer fieldLayer_2 = {
   0
 };
 
+Layer layer3_3 = {
+  (AbShape *)&hourglass_mini,
+  {(screenWidth/2)+10, (screenHeight/2)+5}, /**< bit below & right of center */
+  {0,0}, {0,0},				    /* last & next pos */
+  COLOR_ORANGE,
+  &fieldLayer_2
+};
+
 Layer layer3_2 = {
   (AbShape *)&hourglass,
   {(screenWidth/2)+10, (screenHeight/2)+5}, /**< bit below & right of center */
   {0,0}, {0,0},				    /* last & next pos */
   COLOR_PINK,
-  &fieldLayer_2
+  &layer3_3
 };
 
-MovLayer ml0_2 = {&layer3_2, {1,0}, 0};
+MovLayer ml0_3 = {&layer3_3, {1,0}, 0};
+MovLayer ml0_2 = {&layer3_2, {1,2}, &ml0_3};
 
 void display_new_find_frequency(){
   layerInit(&layer3_2);
@@ -49,12 +58,14 @@ void display_new_find_frequency(){
 }
 
 void find_frequency_display(char btn_pressed) {
-  switch(btn_pressed & 15) {
+  /*switch(btn_pressed & 15) {
   case 14:
     bgColor = COLOR_RED;
     display_new_find_frequency();
     break;
   default:
-    break;//mlAdvance(&ml0_2, &fieldFence);
-  }
+    break;
+    
+  }*/
+  mlAdvance(&ml0_2, &fieldFence);
 }

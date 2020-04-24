@@ -40,8 +40,8 @@ int ab_hourglass_check(const ab_hourglass *hourglass, const Vec2 *center_pos, co
   int center_width = (hourglass->half_size.axes[0]) + is_even;
   int offset = ((2 * hourglass->half_size.axes[0]) - center_width) / 2;
 
-  u_int abs_val_x = abs_val(pixel->axes[0], center_pos->axes[0]);
-  u_int abs_val_y = abs_val(pixel->axes[1], center_pos->axes[1]);
+  int abs_val_x = abs_val(pixel->axes[0], center_pos->axes[0]);
+  int abs_val_y = abs_val(pixel->axes[1], center_pos->axes[1]);
 
   if (abs_val_x <= (hourglass->half_size.axes[0] + hourglass->base_offset) &&
       abs_val_y > hourglass->half_size.axes[1] &&
@@ -53,7 +53,8 @@ int ab_hourglass_check(const ab_hourglass *hourglass, const Vec2 *center_pos, co
     return 0;
   }
   if (abs_val_y <= offset) {
-    return offset >= (int)abs_val_x - (center_width/2);
+    
+    return (abs_val_x - (center_width/2)) <= abs_val_y;
   }
   return 1;
 }
