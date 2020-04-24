@@ -9,9 +9,10 @@
 #include "buttons.h"
 #include "simon.h"
 #include "buzzer.h"
+#include "fur_elise_display.h"
 
 char game_num = 1;
-
+char game_changed = 0;
 /*
  * Interrupt handler for Simon that moves to 
  * the next state if BTN3 is pressed or
@@ -27,7 +28,7 @@ void game_four_interrupt_handler()
   // If BTN3 is pressed, got to next state,
   // or namely state 1.
   if ((P2IN & BUTTONS) == (~BTN3 & BUTTONS)) {
-    game_num = 1;
+    game_num = game_changed = 1;
     curr_pattern = 0;
     add_pattern = 1;
     wait_for_pattern = 0;
@@ -94,11 +95,14 @@ void game_four_interrupt_handler()
  * Input: None
  * Output: None
  */
-void game_one_interrupt_handler()
+void game_one_interrupt_handler(unsigned char p2_ifg)
 {
   if ((P2IN & BIT0) == 0) {
     game_num = 2;
+    game_changed = 1;
+    return;
   }
+  //fur_elise_display(p2_ifg | (P2IN & BUTTONS));
 }
 
 // DEPRECATED. The following code can be

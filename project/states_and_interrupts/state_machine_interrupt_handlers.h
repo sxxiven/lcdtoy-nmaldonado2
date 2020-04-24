@@ -8,6 +8,7 @@
 #define stateMachineInterruptHandlers_included
 
 extern char game_num;
+extern char game_changed;
 
 // Interrupt handlers for the corresponding
 // game numbers.
@@ -16,6 +17,6 @@ extern char game_num;
 void game_four_interrupt_handler();
 
 // Interrupt handler for Fur Elise.
-void game_one_interrupt_handler();
+void game_one_interrupt_handler(unsigned char p2_ifg);
 
 #endif // included

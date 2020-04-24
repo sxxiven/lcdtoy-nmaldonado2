@@ -22,35 +22,21 @@
 #include "find_frequency_display.h"
 #include "catch_red_display.h"
 
-void display_new_game() {
-switch(game_num) {
-    case 1:
-      display_new_piano();
-      break;
-    case 2:
-      keys_to_change = 0;
-      display_new_find_frequency();
-      break;
-    case 3:
-      display_new_catch_red();
-      break;
-    default:
-      //
-      break;
-    }
-}
-
 
 void display_game() {
-  static u_char curr_game = 1;
-  if (game_num != curr_game) {
+  if(game_changed){
+    redrawScreen = 1;
+    return;
+  }
+  /*
+  if (game_changed) {
     display_new_game();
-    curr_game = game_num;
+    game_changed = 0;
     redrawScreen = 0;
     //redrawScreen = 1;
     return;
   }
-  
+  */
   u_char btn_pressed = buttons_read();
   if ((btn_pressed & 240) || game_num != 1){
     switch(game_num) {
