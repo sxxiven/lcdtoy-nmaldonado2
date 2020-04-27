@@ -3,7 +3,7 @@
 // which generates a random frequency and maps a
 // random button to the frequency.
 
-extern signed char frequency_btn;
+//extern signed char frequency_btn;
 
 // Generates random frequency and maps it
 // to a random button number (1 - 3).

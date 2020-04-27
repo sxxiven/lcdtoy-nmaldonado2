@@ -11,13 +11,6 @@
 #include "simon.h"
 #include "buzzer.h"
 
-unsigned char add_pattern = 1;
-unsigned char curr_pattern = 0;
-unsigned char wait_for_pattern = 0;
-unsigned char game_pattern[32];
-
-static char display_pattern();
-
 /*
  * Function that prints the simon pattern and
  * returns 1, if more of the pattern still
@@ -27,6 +20,16 @@ static char display_pattern();
  * Output: 1 to continue printing the pattern,
  *         or 0 if the pattern is done printing.
  */
+
+/*
+unsigned char add_pattern = 1;
+unsigned char curr_pattern = 0;
+unsigned char wait_for_pattern = 0;
+unsigned char game_pattern[10];
+
+static char display_pattern();
+
+
 static char display_pattern()
 {
 
@@ -111,3 +114,4 @@ void simon()
     print_pattern = display_pattern();
   }
 }
+*/

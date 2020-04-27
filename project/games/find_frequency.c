@@ -11,7 +11,7 @@
 #include "buzzer.h"
 #include "buttons.h"
 
-signed char frequency_btn = -1;
+//signed char frequency_btn = -1;
 
 /*
  * Function that generates a random frequency,
@@ -23,6 +23,7 @@ signed char frequency_btn = -1;
  */
 void find_frequency()
 {
+  /*
   static int tick = 0;
   static int rand_num_cycles = 0;
 
@@ -61,5 +62,7 @@ void find_frequency()
       break;
     }
   }
-  buzzer_set_period(rand_num_cycles, 1);
+  //buzzer_set_period(rand_num_cycles, 1);
+  buzzer_set_period(0,0);
+  */
 }
