@@ -6,10 +6,7 @@
 
 #include <msp430.h>
 #include "state_machine_interrupt_handlers.h"
-#include "simon.h"
-#include "catch_red.h"
-#include "find_frequency.h"
-#include "fur_elise.h"
+//#include "fur_elise.h"
 
 #include "buttons.h"
 #include "libTimer.h"
@@ -21,36 +18,30 @@
 #include "fur_elise_display.h"
 #include "find_frequency_display.h"
 #include "catch_red_display.h"
-
+//#include "simon_display.h"
+#include "catch_red_ml.h"
+#include "led.h"
 
 void display_game() {
   if(game_changed){
     redrawScreen = 1;
     return;
   }
-  /*
-  if (game_changed) {
-    display_new_game();
-    game_changed = 0;
-    redrawScreen = 0;
-    //redrawScreen = 1;
-    return;
-  }
-  */
+
   u_char btn_pressed = buttons_read();
   if ((btn_pressed & 240) || game_num != 1){
     switch(game_num) {
     case 1:
-      fur_elise_display(btn_pressed);
+      mlAdvance(&ml_key_1, &fieldFence);
       break;
     case 2:
-      find_frequency_display(btn_pressed);
+      mlAdvance(&ml_mini_hg_1, &fieldFence);
       break;
     case 3:
       catch_red_display(btn_pressed);
       break;
     default:
-      //
+//  simon_display(btn_pressed);
       break;
     }
     redrawScreen = 1;
@@ -62,6 +53,7 @@ void display_game() {
 
 void wdt_c_handler()
 {
+//led_change();
   static short count = 0;
   //P1OUT |= GREEN_LED;		      /**< Green LED on when cpu on */
   count ++;
@@ -71,21 +63,22 @@ void wdt_c_handler()
   }
 
   // Plays game based on game_num/state.
-  switch(game_num) {
+/*
+switch(game_num) {
   case 1:
     
     fur_elise_sound();
     break;
   case 2:
-    find_frequency();
+//   find_frequency();
     break;
   case 3:
-    catch_red();
-    break;
-  default:
-    simon();
+//catch_red();
+break;
+  case 4:
+// simon();
     break;
   }
-    
+*/    
   // P1OUT &= ~GREEN_LED;		    /**< Green LED off when cpu off */
 }

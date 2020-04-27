@@ -14,13 +14,12 @@
  * Input: None.
  * Outpu: None.
  */
-/*
+
 void __interrupt_vec(PORT2_VECTOR) Port_2()
 {
 
   // Handle interrupt based on button.
   if (P2IFG & BUTTONS) {
-
     // Clear P2IFG for next interrupt interpretation.
     P2IFG &= ~BUTTONS;
 
@@ -41,13 +40,13 @@ void __interrupt_vec(PORT2_VECTOR) Port_2()
       break;
 
     // Simon interrupt handler.
-    case 4:
-      game_four_interrupt_handler();
-      break;
+    //case 4:
+      //game_four_interrupt_handler();
+      //break;
     }
 
     // Update IES.
     buttons_update_interrupt_sense();
   }
 }
-*/
+
