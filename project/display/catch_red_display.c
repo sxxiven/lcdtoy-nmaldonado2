@@ -13,6 +13,8 @@
 #include "move_layer.h"
 #include "display_utils.h"
 #include "find_frequency_display.h"
+#include "catch_red_display.h"
+#include "catch_red_ml.h"
 
 Layer layer_ball_4 = {		
   (AbShape *)&circle14,
