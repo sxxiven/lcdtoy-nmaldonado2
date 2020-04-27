@@ -5,7 +5,8 @@
  *  While the CPU is running the green LED is on, and
  *  when the screen does not need to be redrawn the CPU
  *  is turned off along with the green LED.
- */  
+ */
+
 #include <msp430.h>
 #include <lcdutils.h>
 #include "shape.h"
@@ -14,11 +15,10 @@
 #include "fur_elise_display.h"
 #include "hourglass.h"
 #include "display_utils.h"
+#include "buzzer.h"
 
 const ab_hourglass hourglass = {ab_hourglass_get_bounds, ab_hourglass_check, {12, 17}, 3};
 const ab_hourglass hourglass_mini = {ab_hourglass_get_bounds, ab_hourglass_check, {10, 15}, 0};
-AbRect rect11 = {abRectGetBounds, abRectCheck, {10,10}}; /**< 10x10 rectangle */
-AbRArrow rightArrow2 = {abRArrowGetBounds, abRArrowCheck, 30};
 
 AbRectOutline fieldOutline2 = {	/* playing field */
   abRectOutlineGetBounds, abRectOutlineCheck,   
@@ -72,11 +72,11 @@ MovLayer ml_mini_hg_1 = {&layer_mini_hourglass_1, {1,0}, &ml_mini_hg_2};
 
 void display_new_find_frequency(){
   //fill_rectangle(0,0,screenWidth,screenHeight,COLOR_GREEN);
+  bgColor = COLOR_GREEN;
   layerInit(&layer_mini_hourglass_1);
   layerDraw(&layer_mini_hourglass_1);
   layerGetBounds(&fieldLayer_2, &fieldFence);
-  bgColor = COLOR_GREEN;
-}
+ }
 
 void change_color() {
   static u_char color_pattern = 1;
@@ -84,19 +84,17 @@ void change_color() {
   layer_mini_hourglass_1.color = (color_pattern) ? COLOR_ORANGE : COLOR_RED;
   layer_mini_hourglass_2.color = (color_pattern) ? COLOR_ORANGE : COLOR_YELLOW;
   layer_hourglass_1.color = layer_hourglass_2.color = (color_pattern) ? COLOR_BLACK : COLOR_WHITE;
-  color_pattern = (color_pattern) ? 0 : 1; 
+  color_pattern = (color_pattern) ? 0 : 1;
+  (color_pattern) ? buzzer_set_period(NOTE_A) : buzzer_set_period(NOTE_B);
 }
 
 void change_motion() {
-  static u_char motion = 0;
-  
+  static u_char motion = 0; 
   ml_mini_hg_1.velocity.axes[0] = motion;
   ml_mini_hg_2.velocity.axes[0] = motion;
   ml_hg_1.velocity.axes[1] = motion;
   ml_hg_2.velocity.axes[1] = motion;
   motion = (motion) ? 0 : 1;
+  (motion) ? buzzer_set_period(NOTE_C) : buzzer_set_period(NOTE_D);
 }
 
-void find_frequency_display(char btn_pressed) {
-  mlAdvance(&ml_mini_hg_1, &fieldFence);
-}
