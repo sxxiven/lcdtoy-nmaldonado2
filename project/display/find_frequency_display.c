@@ -9,6 +9,7 @@
 
 #include <msp430.h>
 #include <lcdutils.h>
+#include "lcddraw.h"
 #include "shape.h"
 #include <abCircle.h>
 #include "move_layer.h"
@@ -72,11 +73,15 @@ MovLayer ml_mini_hg_1 = {&layer_mini_hourglass_1, {1,0}, &ml_mini_hg_2};
 
 void display_new_find_frequency(){
   //fill_rectangle(0,0,screenWidth,screenHeight,COLOR_GREEN);
-  bgColor = COLOR_GREEN;
+  bgColor = COLOR_AQUAMARINE;
   layerInit(&layer_mini_hourglass_1);
   layerDraw(&layer_mini_hourglass_1);
   layerGetBounds(&fieldLayer_2, &fieldFence);
- }
+  drawString11x16(60,20,"Time", COLOR_BLACK, COLOR_AQUAMARINE);
+  drawString8x12(20,100, "is of",COLOR_BLACK, COLOR_AQUAMARINE);
+  drawString8x12(20,120, "the",COLOR_BLACK, COLOR_AQUAMARINE);
+  drawString8x12(20,140, "essence", COLOR_BLACK, COLOR_AQUAMARINE);
+}
 
 void change_color() {
   static u_char color_pattern = 1;
@@ -97,4 +102,3 @@ void change_motion() {
   motion = (motion) ? 0 : 1;
   (motion) ? buzzer_set_period(NOTE_C) : buzzer_set_period(NOTE_D);
 }
-

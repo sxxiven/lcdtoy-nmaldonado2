@@ -72,6 +72,40 @@ void drawChar5x7(u_char rcol, u_char rrow, char c,
   }
 }
 
+
+void drawChar8x12(u_char rcol, u_char rrow, char c, 
+     u_int fgColorBGR, u_int bgColorBGR) 
+{
+  u_char oc = c - 0x20;
+
+  lcd_setArea(rcol, rrow, rcol + 7, rrow + 11);
+
+ /* relative to requested col/row */
+
+  for (u_char col = 0; col < 12; col++) {
+    for (u_char bit = 128; bit > 0; bit >>= 1) {
+      u_int color = (font_8x12[oc][col] & bit) ?  fgColorBGR : bgColorBGR;
+      lcd_writeColor(color);
+    }
+  }
+}
+
+void drawChar11x16(u_char rcol, u_char rrow, char c, 
+     u_int fgColorBGR, u_int bgColorBGR) 
+{
+  u_char oc = c - 0x20;
+  u_int bit = 1;
+  
+  lcd_setArea(rcol, rrow, rcol + 10, rrow + 15); /* relative to requested col/row */
+  for (u_char row = 0; row < 16; row++) {
+    for (u_char col = 0; col < 11; col++) {
+      u_int color = (font_11x16[oc][col] & bit) ? fgColorBGR : bgColorBGR;
+      lcd_writeColor(color);
+    }
+    bit <<= 1;
+  }
+}
+
 /** Draw string at col,row
  *  Type:
  *  FONT_SM - small (5x8,) FONT_MD - medium (8x12,) FONT_LG - large (11x16)
@@ -91,6 +125,32 @@ void drawString5x7(u_char col, u_char row, char *string,
   while (*string) {
     drawChar5x7(cols, row, *string++, fgColorBGR, bgColorBGR);
     cols += 6;
+  }
+}
+
+
+void drawString8x12(u_char col, u_char row, char *string,
+		u_int fgColorBGR, u_int bgColorBGR)
+{
+  u_char cols = col;
+  // Prevents text wrap.
+  while (*string && (cols + 7 < screenWidth)) {
+    drawChar8x12(cols, row, *string++, fgColorBGR, bgColorBGR);
+    //Width between chars
+    cols += 9;
+  }
+}
+
+void drawString11x16(u_char col, u_char row, char *string,
+		u_int fgColorBGR, u_int bgColorBGR)
+{
+  u_char cols = col;
+
+  // Prevents text wrap
+  while (*string && (cols + 10 < screenWidth)) {
+    drawChar11x16(cols, row, *string++, fgColorBGR, bgColorBGR);
+    //Width between chars
+    cols += 12;
   }
 }
 
