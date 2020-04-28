@@ -7,9 +7,12 @@
 #include <msp430.h>
 #include "led.h"
 #include "buttons.h"
-#include "simon.h"
+//#include "simon.h"
 #include "buzzer.h"
-#include "fur_elise_display.h"
+#include "shape.h"
+#include "catch_red_display.h"
+//#include "fur_elise_display.h"
+#include "catch_red_ml.h"
 
 char game_num = 1;
 char game_changed = 0;
@@ -22,70 +25,44 @@ char game_changed = 0;
  * Input: None
  * Output: None
  */
+/*
 void game_four_interrupt_handler()
 {
 
-  // If BTN3 is pressed, got to next state,
-  // or namely state 1.
-  if ((P2IN & BUTTONS) == (~BTN3 & BUTTONS)) {
-    game_num = game_changed = 1;
-    curr_pattern = 0;
-    add_pattern = 1;
-    wait_for_pattern = 0;
+if ((P2IN & BUTTONS) == (~BTN2 & BUTTONS)) {
+    green_on = 0;
+    game_num = 4;
+    game_changed = 1;
   }
+ else {
+turn_on_red();
+}
+}
+*/
+ // Handler for catch red which
+ // makes the lights toggle faster
+ // if the red light and BTN4 are pressed
+ // simultaneously.
+ 
+void game_three_interrupt_handler()
+{
 
-  // If waiting_for pattern, evaluate.
-  else if (wait_for_pattern) {
-
-
-    // If BTN4 is pressed, turn on red.
-    if ((P2IN & BUTTONS) == (~BTN4 & BUTTONS)) {
-      turn_on_red();
-      buzzer_set_period(900, 2);
-    }
-
-    // If BTN1 is pressed, turn on green.
-    else if ((P2IN & BUTTONS) == (~BTN1 & BUTTONS)) {
-      turn_on_green();
-      buzzer_set_period(1200, 1);
-    }
-
-    // Otherwise, if button is released, analyze.
-    else {
-      
-      // If led flag matches its associated
-      // pattern stored, then evaluate.
-      if ((green_on && game_pattern[curr_pattern] == 0) || (red_on && game_pattern[curr_pattern] == 1)) {
-	curr_pattern++;
-
-	// Max of 32 possible patterns, so
-	// reset.
-	if (curr_pattern >= 31) {
-	  curr_pattern = 0;
-	  wait_for_pattern = 0;
-          add_pattern = 1;
-	}
-
-	// 2 Marks the end of the pattern
-	// so add a new pattern.
-	else if (game_pattern[curr_pattern] == 2) {
-          add_pattern = 1;
-	  wait_for_pattern = 0;
-	}
-      }
-
-      // Otherwise, invalid pattern entered
-      // so start from the beginning.
-      else {
-        curr_pattern = 0;
-        wait_for_pattern = 0;
-        add_pattern = 1;
-      }
-      
-      buzzer_set_period(0,0);
-      turn_off_green_red();
-    }   
+  // If BTN2 pressed, go to next state.
+  if ((P2IN & BUTTONS) == (~BTN2 & BUTTONS)) {
+    green_on = 0;
+    game_num = 1;
+    game_changed = 1;
   }
+  
+  if ((P2IN & BUTTONS) == (~BTN4 & BUTTONS)) {
+    change_ball_color();
+buzzer_set_period(NOTE_C);
+turn_on_red();
+  }
+  else {
+turn_off_red();
+buzzer_set_period(0);
+}
 }
 
 /*
@@ -95,14 +72,42 @@ void game_four_interrupt_handler()
  * Input: None
  * Output: None
  */
-void game_one_interrupt_handler(unsigned char p2_ifg)
+void game_one_interrupt_handler()
 {
   if ((P2IN & BIT0) == 0) {
     game_num = 2;
     game_changed = 1;
+turn_off_red();
     return;
   }
-  //fur_elise_display(p2_ifg | (P2IN & BUTTONS));
+  if (P2IN & BTN4) {
+    key_1.color = COLOR_WHITE;
+  }
+  else {
+    buzzer_set_period(NOTE_E);
+    key_1.color = COLOR_BLUE;
+  }
+  if (P2IN & BTN3) {
+    key_2.color = COLOR_WHITE;
+  }
+  else {
+    buzzer_set_period(NOTE_E_FLAT);
+    key_2.color = COLOR_RED;
+  }
+  if (P2IN & BTN2) {
+    key_3.color = COLOR_WHITE;
+  }
+  else {
+    buzzer_set_period(NOTE_B);
+    key_3.color = COLOR_YELLOW;
+  }
+if ((P2IN & BUTTONS) == 15) {
+    buzzer_set_period(0);
+turn_off_red();
+}
+ else {
+turn_on_red();
+}
 }
 
 // DEPRECATED. The following code can be

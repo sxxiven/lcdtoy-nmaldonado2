@@ -16,7 +16,9 @@ extern char game_changed;
 // Interrupt handler for Simon.
 void game_four_interrupt_handler();
 
+void game_three_interrupt_handler();
+
 // Interrupt handler for Fur Elise.
-void game_one_interrupt_handler(unsigned char p2_ifg);
+void game_one_interrupt_handler();
 
 #endif // included
