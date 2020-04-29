@@ -1,34 +1,12 @@
-#include "move_layer_struct.h"
-#include "lcdutils.h"
+#ifndef FUR_ELISE_DISPLAY
+#define FUR_ELISE_DISPLAY
 
-/*
-extern MovLayer ml3;
-extern MovLayer ml1;
-extern MovLayer ml0;
-extern Layer fieldLayer;
-extern Layer layer0;
-extern Layer layer1;
-extern Layer layer2;
-extern Layer layer3;
-extern Layer layer4;
-extern AbRect rect10;
-extern AbRArrow rightArrow;
-extern AbRectOutline fieldOutline;
-*/
-/*
-typedef struct key_struct{
-  void (*print_key)(u_char x, u_char y, u_char min_width, u_char width, u_char small_height, u_char large_height, u_char start_descent, u_int bgr);
-  u_char x; u_char y;
-  u_char min_width; u_char width;
-  u_char min_height; u_char height;
-  u_char start_descent; u_int bgr;
-  struct key_struct *next;
-} key;
+extern MovLayer ml_key_1;
 
-extern key *keys_to_change;
-
-*/
-
-
+extern Layer key_1;
+extern Layer key_2;
+extern Layer key_3;
 
 void display_new_piano();
+void fur_elise_display(u_char btn_pressed);
+#endif
