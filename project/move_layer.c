@@ -5,8 +5,8 @@
 #include "shape.h"
 #include "move_layer.h"
 
-u_int bgColor = COLOR_BLUE;
-int redrawScreen = 1;
+u_int bgColor = COLOR_GREEN;
+u_char redrawScreen = 1;
 Region fieldFence;
 
 void movLayerDraw(MovLayer *movLayers, Layer *layers)
@@ -39,6 +39,7 @@ void movLayerDraw(MovLayer *movLayers, Layer *layers)
 	    color = probeLayer->color;
 	    break; 
 	  } /* if probe check */
+        
 	} // for checking all layers at col, row
 	lcd_writeColor(color); 
       } // for col
@@ -57,6 +58,7 @@ void movLayerDraw(MovLayer *movLayers, Layer *layers)
  */
 void mlAdvance(MovLayer *ml, Region *fence)
 {
+  drawString8x12(20,100, "HERE1",COLOR_RED, COLOR_AQUAMARINE);
   Vec2 newPos;
   u_char axis;
   Region shapeBoundary;
@@ -67,8 +69,12 @@ void mlAdvance(MovLayer *ml, Region *fence)
       if ((shapeBoundary.topLeft.axes[axis] < fence->topLeft.axes[axis]) ||
 	  (shapeBoundary.botRight.axes[axis] > fence->botRight.axes[axis]) ) {
 	int velocity = ml->velocity.axes[axis] = -ml->velocity.axes[axis];
+	drawString8x12(20,100, "HERE1",COLOR_RED, COLOR_AQUAMARINE);
 	newPos.axes[axis] += (2*velocity);
-      }	/**< if outside of fence */
+      }
+      else {
+	drawString8x12(20,100, "HERE2",COLOR_RED, COLOR_AQUAMARINE);
+      }/**< if outside of fence */
     } /**< for axis */
     ml->layer->posNext = newPos;
   } /**< for ml */
