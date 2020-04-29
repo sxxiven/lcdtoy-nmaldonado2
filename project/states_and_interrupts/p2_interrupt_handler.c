@@ -22,9 +22,13 @@ void __interrupt_vec(PORT2_VECTOR) Port_2()
   if (P2IFG & BUTTONS) {
     // Clear P2IFG for next interrupt interpretation.
     P2IFG &= ~BUTTONS;
-
     // Fur elise interrupt handler.
     switch(game_num) {
+      case 0:
+	//      game_num = 1;
+	//game_one_interrupt_handler();
+	end_interrupt_handler();
+      break;
     case 1:
       game_one_interrupt_handler();
       break;
@@ -38,11 +42,6 @@ void __interrupt_vec(PORT2_VECTOR) Port_2()
     case 3:
       game_three_interrupt_handler();
       break;
-
-    // Simon interrupt handler.
-    //case 4:
-      //game_four_interrupt_handler();
-      //break;
     }
 
     // Update IES.

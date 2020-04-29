@@ -7,38 +7,13 @@
 #include <msp430.h>
 #include "led.h"
 #include "buttons.h"
-//#include "simon.h"
 #include "buzzer.h"
 #include "shape.h"
 #include "catch_red_display.h"
-//#include "fur_elise_display.h"
-#include "catch_red_ml.h"
 
 char game_num = 1;
 char game_changed = 0;
-/*
- * Interrupt handler for Simon that moves to 
- * the next state if BTN3 is pressed or
- * identifies if the user is currently entering
- * the correct pattern. If not, the game is
- * restarted.
- * Input: None
- * Output: None
- */
-/*
-void game_four_interrupt_handler()
-{
 
-if ((P2IN & BUTTONS) == (~BTN2 & BUTTONS)) {
-    green_on = 0;
-    game_num = 4;
-    game_changed = 1;
-  }
- else {
-turn_on_red();
-}
-}
-*/
  // Handler for catch red which
  // makes the lights toggle faster
  // if the red light and BTN4 are pressed
@@ -49,8 +24,7 @@ void game_three_interrupt_handler()
 
   // If BTN2 pressed, go to next state.
   if ((P2IN & BUTTONS) == (~BTN2 & BUTTONS)) {
-    green_on = 0;
-    game_num = 1;
+    game_num = 0;
     game_changed = 1;
   }
   
@@ -80,6 +54,7 @@ void game_one_interrupt_handler()
 turn_off_red();
     return;
   }
+  /*
   if (P2IN & BTN4) {
     key_1.color = COLOR_WHITE;
   }
@@ -101,14 +76,27 @@ turn_off_red();
     buzzer_set_period(NOTE_B);
     key_3.color = COLOR_YELLOW;
   }
+  */
 if ((P2IN & BUTTONS) == 15) {
-    buzzer_set_period(0);
+  //  buzzer_set_period(0);
 turn_off_red();
 }
+  
  else {
 turn_on_red();
 }
 }
+
+void end_interrupt_handler(){
+  turn_on_red();
+if ((P2IN & BIT2) == 0) {
+game_num = 1;
+game_changed = 1;
+turn_off_red();
+}
+}
+
+
 
 // DEPRECATED. The following code can be
 // found in the assembly file
@@ -149,38 +137,4 @@ void game_two_interrupt_handler()
     }
   }    
 }
-*/
-
- // DEPRECATED: The following code is implemented
- // in the assembly file
- // games_two_three_interrupt_handlers.s
-
- // Handler for catch red which
- // makes the lights toggle faster
- // if the red light and BTN4 are pressed
- // simultaneously.
- /*
-void game_three_interrupt_handler()
-{
-
-  // If BTN2 pressed, go to next state.
-  if ((P2IN & BUTTONS) == (~BTN2 & BUTTONS)) {
-    game_num = 4;
-  }
-  
-  if ((P2IN & BUTTONS) == (~BTN4 & BUTTONS)) {
-
-    // If red is on, go faster.
-    if (red_on) {
-      light_speed -= 5;
-    }
-
-    // Reset light_speed if light_speed is too
-    // fast or red is not on.
-    if (!red_on || light_speed <= 15) {
-      light_speed = 150;
-    }
-  }
-}
-
 */

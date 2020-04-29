@@ -3,20 +3,12 @@
 ;;; transitions for game two (find_frequency)
 ;;; and game three (catch_red).
 
-;;; State Three Machine
-;;; Interrupt handler and state machine for
-;;; game 3, catch red that will increment the
-;;; light_speed if the fourth button is pressed
-;;; when the red led is on. Otherwise the
-;;; game will be reset to a slower speed.
-;;; Input: None
-;;; Output: None
 	.arch msp430g2553
 	.p2align 1,0
 	
 	.text
 
-;;; State machine for game three.
+;;; State machine for game two.
 ;;; Interrupt handler for find_frequency that
 ;;; will go to the next state if the fourth
 ;;; fourth button is pressed. Otherwise a green led light
