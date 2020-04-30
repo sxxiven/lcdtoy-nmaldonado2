@@ -1,11 +1,7 @@
-/** \file shapemotion.c
- *  \brief This is a simple shape motion demo.
- *  This demo creates two layers containing shapes.
- *  One layer contains a rectangle and the other a circle.
- *  While the CPU is running the green LED is on, and
- *  when the screen does not need to be redrawn the CPU
- *  is turned off along with the green LED.
- */  
+// Nichole Maldonado
+// Display consists of three keys that can
+// be moved and colored and play a sound.
+
 #include <msp430.h>
 #include <lcdutils.h>
 #include "shape.h"
@@ -17,12 +13,13 @@
 
 AbRect key = {abRectGetBounds, abRectCheck, {(screenWidth/2) - 20, 20}};
 
+// Key layers
 Layer key_3 = {		
   (AbShape *)&key,
   {(screenWidth/2), (screenHeight/2)-50}, 
   {0,0}, {0,0},				    
   COLOR_WHITE,
-  &fieldLayer_2
+  &field_layer
 };
 
 Layer key_2 = {		
@@ -45,17 +42,30 @@ MovLayer ml_key_3 = {&key_3, {-1,0}, 0};
 MovLayer ml_key_2 = {&key_2, {1,0}, &ml_key_3};
 MovLayer ml_key_1 = {&key_1, {-1,0}, &ml_key_2};
 
+/*
+ * Function that draws the keys initially.
+ * Input: None.
+ * Output: None.
+ */
 void display_new_piano(){
   buzzer_set_period(0);
   bgColor = COLOR_BLACK;
   layerInit(&key_1);
   layerDraw(&key_1);
-  layerGetBounds(&fieldLayer_2, &fieldFence);
+  layerGetBounds(&field_layer, &field_fence);
 }
 
+/*
+ * Function that turns the keys a color
+ * if the button is pressed or white if
+ * the button is released and emits a 
+ * corresponding sound.
+ * Input: None
+ * Output: None
+ */
 void fur_elise_display(u_char btn_pressed) {
-  // fourth btn pressed
-  
+
+  // BTN pressed or released
   if ((btn_pressed>>4) & 8) {
     if (!(btn_pressed & 8)) {
       buzzer_set_period(NOTE_E);
@@ -66,6 +76,7 @@ void fur_elise_display(u_char btn_pressed) {
     }
   }
 
+  // BTN3 pressed or released
   if ((btn_pressed>>4) & 4) {
     if (!(btn_pressed & 4)) {
       buzzer_set_period(NOTE_E_FLAT);
@@ -75,6 +86,8 @@ void fur_elise_display(u_char btn_pressed) {
       key_2.color = COLOR_WHITE;
     }
   }
+
+  // BTN2 pressed or released.
   if ((btn_pressed>>4) & 2) {
     if (!(btn_pressed & 2)) {
       buzzer_set_period(NOTE_B);
@@ -88,6 +101,7 @@ void fur_elise_display(u_char btn_pressed) {
   if ((P2IN & 15) == 15) {
     buzzer_set_period(0);
   }
-  
-  mlAdvance(&ml_key_1, &fieldFence);
+
+  // Advance keys
+  ml_advance(&ml_key_1, &field_fence);
 }
