@@ -6,7 +6,7 @@
 #include <msp430.h>
 #include "buttons.h"
 #include "state_machine_interrupt_handlers.h"
-#include "games_two_three_interrupt_handlers.h"
+#include "game_two_interrupt_handler.h"
 
 /*
  * Function that calls the corresponding
@@ -14,7 +14,6 @@
  * Input: None.
  * Outpu: None.
  */
-
 void __interrupt_vec(PORT2_VECTOR) Port_2()
 {
 
@@ -22,13 +21,14 @@ void __interrupt_vec(PORT2_VECTOR) Port_2()
   if (P2IFG & BUTTONS) {
     // Clear P2IFG for next interrupt interpretation.
     P2IFG &= ~BUTTONS;
-    // Fur elise interrupt handler.
+    
     switch(game_num) {
-      case 0:
-	//      game_num = 1;
-	//game_one_interrupt_handler();
-	end_interrupt_handler();
+    // End game interrupt handler.
+    case 0:
+      end_interrupt_handler();
       break;
+
+    // Fur Elise interrupt handler.
     case 1:
       game_one_interrupt_handler();
       break;
@@ -43,7 +43,6 @@ void __interrupt_vec(PORT2_VECTOR) Port_2()
       game_three_interrupt_handler();
       break;
     }
-
     // Update IES.
     buttons_update_interrupt_sense();
   }

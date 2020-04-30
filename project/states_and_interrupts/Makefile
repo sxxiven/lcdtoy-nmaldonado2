@@ -6,7 +6,7 @@ CFLAGS          = -mmcu=${CPU} -I ../h -I games
 CC              = msp430-elf-gcc
 AS              = msp430-elf-as -mcpu=msp430 --traditional-format -mP
 
-all: wdt_interrupt_handler state_machine_interrupt_handlers p2_interrupt_handler games_two_three_interrupt_handlers wdt_handler
+all: wdt_interrupt_handler state_machine_interrupt_handlers p2_interrupt_handler game_two_interrupt_handler wdt_handler
 
 clean:
 	rm -f *.o
@@ -17,11 +17,11 @@ wdt_interrupt_handler: wdt_interrupt_handler.c ../game_utils/led.h state_machine
 state_machine_interrupt_handlers: ../game_utils/led.h state_machine_interrupt_handlers.h state_machine_interrupt_handlers.c ../game_utils/buttons.h ../../lcdLib/lcdutils.h ../display/catch_red_display.h ../../shapeLib/shape.h
 	${CC} ${CFLAGS} -c -I../game_utils -I../../lcdLib -I../display -I../../shapeLib -I../ state_machine_interrupt_handlers.c
 
-p2_interrupt_handler: p2_interrupt_handler.c ../game_utils/buttons.h state_machine_interrupt_handlers.h games_two_three_interrupt_handlers.h
+p2_interrupt_handler: p2_interrupt_handler.c ../game_utils/buttons.h state_machine_interrupt_handlers.h game_two_interrupt_handler.h
 	${CC} ${CFLAGS} -c -I../game_utils p2_interrupt_handler.c
 
-games_two_three_interrupt_handlers: games_two_three_interrupt_handlers.h games_two_three_interrupt_handlers.s state_machine_interrupt_handlers.h ../game_utils/led.h ../display/find_frequency_display.h
-	${AS} ${CFLAGS} -I../game_utils -I../display games_two_three_interrupt_handlers.s -o games_two_three_interrupt_handlers.o
+game_two_interrupt_handler: game_two_interrupt_handler.h game_two_interrupt_handler.s state_machine_interrupt_handlers.h ../game_utils/led.h ../display/find_frequency_display.h
+	${AS} ${CFLAGS} -I../game_utils -I../display game_two_interrupt_handler.s -o game_two_interrupt_handler.o
 
 wdt_handler: wdt_handler.s
 	${AS} ${CFLAGS} wdt_handler.s -o wdt_handler.o
