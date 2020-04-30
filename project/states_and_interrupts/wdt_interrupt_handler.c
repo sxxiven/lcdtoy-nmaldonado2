@@ -1,7 +1,7 @@
 // Nichole Maldonado
 // This file contains the main function
 // that has 250 interrupts/sec and calls the
-// corresponding game function based on the
+// corresponding game display function based on the
 // game_num.
 
 #include <msp430.h>
@@ -18,32 +18,46 @@
 #include "catch_red_display.h"
 #include "led.h"
 
+/*
+ * Advances the current game display.
+ * Sets for a new display to be drawn
+ * if the game number changes.
+ * Input: None.
+ * Output: None.
+ */
 void display_game() {
   if(game_changed){
-    redrawScreen = 1;
+    redraw_screen = 1;
     return;
   }
 
   u_char btn_pressed = buttons_read();
+  
+  // All game displays except for game one
+  // have displays that constantly move.
   if ((btn_pressed & 240) || game_num != 1){
     switch(game_num) {
     case 1:
       fur_elise_display(btn_pressed);
       break;
     case 2:
-      mlAdvance(&ml_hg_1, &fieldFence);
+      ml_advance(&ml_hg_1, &field_fence);
       break;
     case 3:
       catch_red_display(btn_pressed);
       break;
     }
-    redrawScreen = 1;
+    redraw_screen = 1;
   }
 }
 
 
-/** Watchdog timer interrupt handler. 15 interrupts/sec */
-
+/*
+ * Watchdog handler that advances the
+ * game display every 15 counts.
+ * Input: None.
+ * Output: None.
+ */
 void wdt_c_handler()
 {
   static short count = 0;
@@ -51,7 +65,8 @@ void wdt_c_handler()
   if (count == 15) {
     display_game();
     count = 0;
-}
+  }
+  // Dim led for game 2.
   if (game_num == 2) {
     turn_on_red();
     turn_off_red();
