@@ -7,6 +7,12 @@ all:
 	(cd p2sw-demo; make)
 	(cd shape-motion-demo; make)
 
+specific:
+	(cd timerLib; make install)
+	(cd lcdLib; make install)
+	(cd shapeLib; make install)
+	(cd circleLib; make install)
+
 doc:
 	rm -rf doxygen_docs
 	doxygen Doxyfile
@@ -20,3 +26,11 @@ clean:
 	(cd circleLib; make clean)
 	rm -rf lib h
 	rm -rf doxygen_docs/*
+
+clean_specific:
+	(cd timerLib; make clean)
+	(cd lcdLib; make clean)
+	(cd shapeLib; make clean)
+	(cd circleLib; make clean)
+	rm -rf doxygen_docs/*
+
