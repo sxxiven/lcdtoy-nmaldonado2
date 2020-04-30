@@ -7,8 +7,12 @@ LDFLAGS		= -L/opt/ti/msp430_gcc/include
 #switch the compiler (for the internal make rules)
 CC              = msp430-elf-gcc
 
-all:
+all:	
+	(cd ../timerLib && make)
 	(cd ../ && make specific)
+	(cd ../lcdLib && make libLcd.a)
+	(cd ../shapeLib && make libShape.a)
+	(cd ../circleLib && make libCircle.a)
 	(cd game_utils && make)
 	(cd states_and_interrupts && make)
 	(cd display && make)
