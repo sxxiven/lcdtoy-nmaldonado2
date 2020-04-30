@@ -6,14 +6,18 @@
 #ifndef buzzer_included
 #define buzzer_included
 
+#define NOTE_E 3033
+#define NOTE_E_FLAT 3214
+#define NOTE_B 4049
+#define NOTE_D 3405
+#define NOTE_C 3822
+#define NOTE_A 4545
+
 // Initialize the buzzer.
 void buzzer_init();
 
 // Set the period based on the number of
-// cycles and mute (number of bits shifted).
-void buzzer_set_period(short cycles, char mute);
-
-// Sets the sound based on the note_num
-void set_sound(unsigned char note_num);
+// cycles.
+void buzzer_set_period(short cycles);
 
 #endif // included

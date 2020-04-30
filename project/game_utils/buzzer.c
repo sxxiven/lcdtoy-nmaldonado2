@@ -1,20 +1,11 @@
 // Nichole Maldonado and Previous Commits
 // This file provides functions to initialize
 // the four buttons, and set the sound by
-// adjusting the cycles and mute factor.
+// adjusting the cycles.
 
 #include <msp430.h>
 #include "libTimer.h"
 #include "buzzer.h"
-
-#define NOTE_E 3033
-#define NOTE_E_FLAT 3214
-#define NOTE_B 4049
-#define NOTE_D 3405
-#define NOTE_C 3822
-#define NOTE_A 4545
-
-static short cycles(unsigned char note_num);
 
 /*
  * Function that initializes the buzzer to
@@ -50,60 +41,9 @@ void buzzer_init()
  *        the cycle is shifted.
  * Output: None.
  */
-void buzzer_set_period(short cycles, char mute) 
+void buzzer_set_period(short cycles) 
 {
 
   CCR0 = cycles; 
-  CCR1 = cycles >> mute;
-}
-
-/*
- * Function that assigns the number of cycles for 
- * Fur Elise based on the note number.
- * Input: The note number ranging from 1 - 6.
- * Output: the number of cycles
- */
-static short cycles(unsigned char note_num)
-{
-
-  // Note E
-  if (note_num == 1) {
-    return NOTE_E;
-  }
-
-  // Note E flat
-  if (note_num == 2) {
-    return NOTE_E_FLAT;
-  }
-
-  // Note B
-  if (note_num == 3) {
-    return NOTE_B;
-  }
-
-  // Note D
-  if (note_num == 4) {
-    return NOTE_D;
-  }
-
-  // Note C
-  if (note_num == 5) {
-    return NOTE_C;
-  }
-
-  // Note A
-  return NOTE_A;
-}
-
-/*
- * Function that sets the sound based on
- * the note number passed in.
- * Input: The note number ranging from 1 - 6.
- * Output: None.
- */
-void set_sound(unsigned char i)
-{
-
-  // Finds note based on cycles and sets it.
-  buzzer_set_period(cycles(i), 1);
+  CCR1 = cycles >> 1;
 }

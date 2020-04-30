@@ -3,12 +3,14 @@
 // the buttons by using the pull up_resitors.
 // If a button is pressed, the IES is set to
 // sense an up transition, and vice versa.
+// Also tracks which buttons have changed
+// and the current state of the buttons
 
 #include <msp430.h>
 #include "buttons.h"
 
-static unsigned char switches_last_reported;
-static unsigned char switches_current;
+static unsigned char buttons_last_reported;
+static unsigned char buttons_current;
 
 
 /*
@@ -21,8 +23,7 @@ static unsigned char switches_current;
  */
 void buttons_update_interrupt_sense()
 {
-  // ADDED
-  switches_current = P2IN & BUTTONS;
+  buttons_current = P2IN & BUTTONS;
   
   // Button is up if bit == 1
   // So if button is up, set P2IES to 1, to
@@ -47,17 +48,25 @@ void buttons_init()
   // Enable interrupts from buttons.
   P2IE = BUTTONS;
 
-  // Enable pull-ups for buttons.
-  P2OUT |= BUTTONS;
-
   // Close P1DIR transmission gate for buttons.
   P2DIR &= ~BUTTONS;
   
   buttons_update_interrupt_sense();
 }
 
+/*
+ * Returns the buttons changed in the
+ * high bit and the current state of the
+ * buttons in the low bit. Modified from
+ * Dr.Freudenthal's p2_sw_read.
+ * Input: None.
+ * Output: The high bit denoting whether the
+ *         bits have changed and the low bit
+ *         representing the current state
+ *         of the buttons.
+ */
 unsigned char buttons_read() {
-  unsigned char sw_changed = switches_current ^ switches_last_reported;
-  switches_last_reported = switches_current;
-  return switches_current | (sw_changed << 4);
+  unsigned char btns_changed = buttons_current ^ buttons_last_reported;
+  buttons_last_reported = buttons_current;
+  return buttons_current | (btns_changed << 4);
 }
