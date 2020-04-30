@@ -10,7 +10,7 @@ layerDraw(Layer *layers)
     lcd_setArea(0, row, screenWidth-1, row);
     for (col = 0; col < screenWidth; col++) {
       Vec2 pixelPos = {col, row};
-      u_int color = bgColor;
+      u_int color = bg_color;
       Layer *probeLayer;
       for (probeLayer = layers; probeLayer; probeLayer = probeLayer->next) {
 	if (abShapeCheck(probeLayer->abShape, &probeLayer->pos, &pixelPos)) {

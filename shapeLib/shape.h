@@ -187,6 +187,6 @@ void layerDraw(Layer *layers);
 
 /** Background color.
   */
-extern u_int bgColor;		/*  background color */
+extern u_int bg_color;		/*  background color */
 
 #endif
