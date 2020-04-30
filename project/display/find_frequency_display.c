@@ -1,11 +1,7 @@
-/** \file shapemotion.c
- *  \brief This is a simple shape motion demo.
- *  This demo creates two layers containing shapes.
- *  One layer contains a rectangle and the other a circle.
- *  While the CPU is running the green LED is on, and
- *  when the screen does not need to be redrawn the CPU
- *  is turned off along with the green LED.
- */
+// Nichole Maldonado
+// Displays the custom shape hourglass
+// that can move and change colors.
+// Also displays the 11x16 and 8x12 font.
 
 #include <msp430.h>
 #include <lcdutils.h>
@@ -18,18 +14,19 @@
 
 ab_hourglass hourglass = {ab_hourglass_get_bounds, ab_hourglass_check, {12, 17}, 3};
 
+// Hourglass layers.
 Layer layer_hourglass_2 = {
   (AbShape *)&hourglass,
-  {(screenWidth/2) -30, (screenHeight/2)-30}, /**< bit below & right of center */
-  {0,0}, {0,0},				    /* last & next pos */
+  {(screenWidth/2) -30, (screenHeight/2)-30},
+  {0,0}, {0,0},				  
   COLOR_WHITE,
-  &fieldLayer_2
+  &field_layer
 };
 
 Layer layer_hourglass_1 = {
   (AbShape *)&hourglass,
-  {(screenWidth/2)+30, (screenHeight/2)+30}, /**< bit below & right of center */
-  {0,0}, {0,0},				    /* last & next pos */
+  {(screenWidth/2)+30, (screenHeight/2)+30},
+  {0,0}, {0,0},				  
   COLOR_WHITE,
   &layer_hourglass_2
 };
@@ -37,8 +34,13 @@ Layer layer_hourglass_1 = {
 MovLayer ml_hg_2 = {&layer_hourglass_2, {0,1}, 0};
 MovLayer ml_hg_1 = {&layer_hourglass_1, {0,1}, &ml_hg_2};
 
+/*
+ * Function that displays the start of the 
+ * display.
+ * Input: None.
+ * Output: None.
+ */
 void display_new_find_frequency(){
-  
   bgColor = COLOR_YELLOW;
   layerInit(&layer_hourglass_1);
   layerDraw(&layer_hourglass_1);
@@ -48,6 +50,12 @@ void display_new_find_frequency(){
   drawString8x12(20,140, "essence", COLOR_BLACK, COLOR_YELLOW);
 }
 
+/*
+ * Function that alternates the hourglass
+ * colors between white and black.
+ * Input: None.
+ * Output: None.
+ */
 void change_color() {
   static u_char color_pattern = 1;
   layer_hourglass_1.color = layer_hourglass_2.color = (color_pattern) ? COLOR_BLACK : COLOR_WHITE;
@@ -56,6 +64,12 @@ void change_color() {
   (color_pattern) ? buzzer_set_period(NOTE_A) : buzzer_set_period(NOTE_B);
 }
 
+/*
+ * Function that alternates the hourglasses
+ * between moving and not moving.
+ * Input: None.
+ * Output: None.
+ */
 void change_motion() {
   static u_char motion = 0; 
   ml_hg_1.velocity.axes[1] = motion;
