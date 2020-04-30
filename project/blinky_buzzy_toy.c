@@ -2,6 +2,8 @@
 // This file holds the main function of the
 // program that sets the clocks and game utils.
 // The WDTInterrupts are then enabled.
+// It also includes methods to display the new
+// game or advance the current game.
 
 #include <msp430.h>
 #include "libTimer.h"
@@ -17,40 +19,59 @@
 #include "find_frequency_display.h"
 #include "catch_red_display.h"
 
-void display_welcome() {
+static void display_end();
+static void display_new_game();
+static void advance_draw();
+/*
+ * Function that displays the end screen.
+ * Input: None.
+ * Output: None.
+ */
+static void display_end() {
   fillRectangle(0,0,screenWidth, screenHeight, COLOR_YELLOW);
-  //layerGetBounds(&fieldLayer_2, &fieldFence);
   drawString11x16(40,65,"FIN", COLOR_BLACK, COLOR_YELLOW);
   drawString5x7(1,140, "press btn3 to restart", COLOR_BLACK, COLOR_YELLOW);
 }
 
-void display_new_game() {
-  switch(game_num) {
-    case 1:
-      display_new_piano();
-      break;
-    case 2:      
-      display_new_find_frequency();
-      break;
-    case 3:
-      display_new_catch_red();
-      break;
-  case 0:
-    display_welcome();
-    }
- game_changed = 0;
-}
-
-void advance_draw() {
+/*
+ * Displays new game based on the game num.
+ * Input: None
+ * Output: None
+ */
+static void display_new_game() {
   switch(game_num) {
   case 1:
-    movLayerDraw(&ml_key_1, &key_1);
+    display_new_piano();
     break;
-  case 2:
-    movLayerDraw(&ml_hg_1, &layer_hourglass_1);
+  case 2:      
+    display_new_find_frequency();
     break;
   case 3:
-    movLayerDraw(&ml_ball_1, &layer_ball_1);
+    display_new_catch_red();
+    break;
+  case 0:
+    display_end();
+  }
+
+  // New game has been loaded.
+  game_changed = 0;
+}
+
+/*
+ * Advances the current game's display
+ * Input: None.
+ * Output: None.
+ */
+static void advance_draw() {
+  switch(game_num) {
+  case 1:
+    mov_layer_draw(&ml_key_1, &key_1);
+    break;
+  case 2:
+    mov_layer_draw(&ml_hg_1, &layer_hourglass_1);
+    break;
+  case 3:
+    mov_layer_draw(&ml_ball_1, &layer_ball_1);
     break;
   }
 }
@@ -58,6 +79,8 @@ void advance_draw() {
 /*
  * Main function that sets clocks, game
  * utils, and enables periodic interrupts
+ * Also controls whether to display a new game
+ * or advance the current game display.
  * Input: None
  * Output: None
  */
@@ -72,21 +95,23 @@ int main(void) {
   
   buzzer_init();
   buttons_init();
-  //display_welcome();
-  //game_num = 0;
+  
   display_new_piano();
-  //display_welcome();
-  // game_num = 0;
   enableWDTInterrupts();
-  //  game_num = 1;
+
    for(;;) {
-    while (!redrawScreen && !game_changed) {  
-  or_sr(0x10);	      // CPU OFF
+    while (!redraw_screen && !game_changed) {  
+  or_sr(0x10);	   
     }
     redrawScreen = 0;
+
+    // Advance current display if
+    // game did not change.
     if (game_changed == 0) {
       advance_draw();
     }
+
+    // Otherwise advance to new game display
     else {
       display_new_game();
     }
