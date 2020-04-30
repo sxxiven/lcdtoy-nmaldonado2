@@ -12,11 +12,11 @@ extern char game_changed;
 
 // Interrupt handlers for the corresponding
 // game numbers.
+
+// Interrupt handler for end screen
 void end_interrupt_handler();
 
-// Interrupt handler for Simon.
-void game_four_interrupt_handler();
-
+// Interrupt handler for catch red.
 void game_three_interrupt_handler();
 
 // Interrupt handler for Fur Elise.
