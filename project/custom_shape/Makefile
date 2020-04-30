@@ -12,5 +12,5 @@ all: hourglass
 clean:
 	rm -f *.o
 
-hourglass: hourglass.c hourglass.h ../../shapeLib/shape.h
-	${CC} ${CFLAGS} -c -I../../shapeLib hourglass.c
+hourglass: hourglass.c hourglass.h ../../shapeLib/shape.h ../../lcdLib/lcdutils.h
+	${CC} ${CFLAGS} -c -I../../lcdLib -I../../shapeLib hourglass.c
