@@ -1,4 +1,4 @@
-#Display
+# Display
 
 This directory contains files for the three main shape moving displays:
 catch_red_display, fur_elise_display, and find_frequency_display. It also
