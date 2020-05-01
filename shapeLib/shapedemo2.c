@@ -33,7 +33,7 @@ Layer layer0 = {
 };
 
 
-u_int bgColor = COLOR_BLUE;
+u_int bg_color = COLOR_BLUE;
 
 int
 main()

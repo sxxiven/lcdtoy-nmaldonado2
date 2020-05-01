@@ -5,6 +5,7 @@
 
 const AbRect rect10 = {abRectGetBounds, abRectCheck, 10,10};;
 
+
 void
 abDrawPos(AbShape *shape, Vec2 *shapeCenter, u_int fg_color, u_int bg_color)
 {

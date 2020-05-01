@@ -1,7 +1,7 @@
 all: libShape.a shapedemo.elf shapedemo2.elf shapedemo3.elf
 
 CPU             = msp430g2553
-CFLAGS          = -mmcu=${CPU} -Os -I../h 
+CFLAGS          = -mmcu=${CPU} -Os -I../h -I../lcdLib 
 LDFLAGS		= -L../lib -L/opt/ti/msp430_gcc/include/
 
 #switch the compiler (for the internal make rules)
@@ -41,3 +41,4 @@ load2: shapedemo2.elf
 
 load3: shapedemo3.elf
 	msp430loader.sh $^
+
