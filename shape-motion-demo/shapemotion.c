@@ -18,28 +18,28 @@
 
 
 AbRect rect10 = {abRectGetBounds, abRectCheck, {10,10}}; /**< 10x10 rectangle */
-AbRArrow rightArrow = {abRArrowGetBounds, abRArrowCheck, 30};
+//AbRArrow rightArrow = {abRArrowGetBounds, abRArrowCheck, 30};
 
 AbRectOutline fieldOutline = {	/* playing field */
   abRectOutlineGetBounds, abRectOutlineCheck,   
   {screenWidth/2 - 10, screenHeight/2 - 10}
 };
-
+/*
 Layer layer4 = {
   (AbShape *)&rightArrow,
-  {(screenWidth/2)+10, (screenHeight/2)+5}, /**< bit below & right of center */
-  {0,0}, {0,0},				    /* last & next pos */
+  {(screenWidth/2)+10, (screenHeight/2)+5}, 
+  {0,0}, {0,0},				
   COLOR_PINK,
   0
 };
-  
+ */ 
 
 Layer layer3 = {		/**< Layer with an orange circle */
   (AbShape *)&circle8,
   {(screenWidth/2)+10, (screenHeight/2)+5}, /**< bit below & right of center */
   {0,0}, {0,0},				    /* last & next pos */
   COLOR_VIOLET,
-  &layer4,
+  0
 };
 
 
@@ -104,7 +104,7 @@ void movLayerDraw(MovLayer *movLayers, Layer *layers)
     for (row = bounds.topLeft.axes[1]; row <= bounds.botRight.axes[1]; row++) {
       for (col = bounds.topLeft.axes[0]; col <= bounds.botRight.axes[0]; col++) {
 	Vec2 pixelPos = {col, row};
-	u_int color = bgColor;
+	u_int color = bg_color;
 	Layer *probeLayer;
 	for (probeLayer = layers; probeLayer; 
 	     probeLayer = probeLayer->next) { /* probe all layers, in order */
@@ -148,7 +148,7 @@ void mlAdvance(MovLayer *ml, Region *fence)
 }
 
 
-u_int bgColor = COLOR_BLUE;     /**< The background color */
+u_int bg_color = COLOR_BLUE;     /**< The background color */
 int redrawScreen = 1;           /**< Boolean for whether screen needs to be redrawn */
 
 Region fieldFence;		/**< fence around playing field  */
