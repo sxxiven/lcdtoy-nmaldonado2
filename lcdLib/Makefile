@@ -13,6 +13,8 @@ libLcd.a: font-11x16.o font-5x7.o font-8x12.o lcdutils.o lcddraw.o
 
 lcddraw.o: lcddraw.c lcddraw.h lcdutils.h
 lcdutils.o: lcdutils.c lcdutils.h
+diamond.o: diamond.c diamond.h lcddraw.h lcdutils.h
+triangle.o: triangle.c triangle.h lcddraw.h lcdutils.h
 
 install: libLcd.a
 	mkdir -p ../h ../lib
@@ -25,5 +27,68 @@ clean:
 lcddemo.elf: lcddemo.o libLcd.a 
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer 
 
+lcdx.elf: lcdx.o libLcd.a 
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer 
+
 load: lcddemo.elf
+	msp430loader.sh $^
+
+loadx: lcdx.elf
+	msp430loader.sh $^
+
+houseShape.elf: houseShape.o libLcd.a diamond.h triangle.o
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer
+
+
+loadHouse: houseShape.elf
+	msp430loader.sh $^
+
+lcdRectangle.elf: lcdRectangle.o libLcd.a 
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer
+
+
+loadRectangle: lcdRectangle.elf
+	msp430loader.sh $^
+
+
+xshape.elf: xshape.o libLcd.a 
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer 
+
+loadX: xshape.elf
+	msp430loader.sh $^
+
+crossShape.elf: crossShape.o libLcd.a 
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer 
+
+loadCross: crossShape.elf
+	msp430loader.sh $^
+
+diamondShape.elf: diamondShape.o libLcd.a 
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer 
+
+loadDiamond: diamondShape.elf
+	msp430loader.sh $^
+
+squareShape.elf: squareShape.o libLcd.a 
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer 
+
+loadSquare: squareShape.elf
+	msp430loader.sh $^
+
+triangleShape.elf: shapeTriangle.o libLcd.a triangle.o
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer 
+
+loadTriangle: triangleShape.elf
+	msp430loader.sh $^
+
+bracketShape.elf: bracketShape.o libLcd.a
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer 
+
+loadBracket: bracketShape.elf
+	msp430loader.sh $^
+
+curveShape.elf: curveShape.o libLcd.a
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer 
+
+loadCurve: curveShape.elf
 	msp430loader.sh $^
