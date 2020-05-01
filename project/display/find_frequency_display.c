@@ -41,7 +41,7 @@ MovLayer ml_hg_1 = {&layer_hourglass_1, {0,1}, &ml_hg_2};
  * Output: None.
  */
 void display_new_find_frequency(){
-  bgColor = COLOR_YELLOW;
+  bg_color = COLOR_YELLOW;
   layerInit(&layer_hourglass_1);
   layerDraw(&layer_hourglass_1);
   drawString11x16(60,20,"Time", COLOR_BLACK, COLOR_YELLOW);

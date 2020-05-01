@@ -45,7 +45,7 @@ MovLayer ml_ball_1 = {&layer_ball_1, {-2,0}, &ml_ball_2};
  * Output: None.
  */
 void display_new_catch_red(){
-  bgColor = COLOR_WHITE;
+  bg_color = COLOR_WHITE;
   layerInit(&layer_ball_1);
   layerDraw(&layer_ball_1);
 }
@@ -74,10 +74,10 @@ void change_ball_color() {
  */
 void catch_red_display(char btn_pressed) {
   if ((btn_pressed & 1) == 0) {
-    bgColor = COLOR_BLACK;
+    bg_color = COLOR_BLACK;
   }
   else if ((btn_pressed & 4) == 0) {
-    bgColor = COLOR_WHITE;
+    bg_color = COLOR_WHITE;
   }
   ml_advance(&ml_ball_1, &field_fence);
 }

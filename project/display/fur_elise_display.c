@@ -49,7 +49,7 @@ MovLayer ml_key_1 = {&key_1, {-1,0}, &ml_key_2};
  */
 void display_new_piano(){
   buzzer_set_period(0);
-  bgColor = COLOR_BLACK;
+  bg_color = COLOR_BLACK;
   layerInit(&key_1);
   layerDraw(&key_1);
   layerGetBounds(&field_layer, &field_fence);
