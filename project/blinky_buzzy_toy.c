@@ -103,7 +103,7 @@ int main(void) {
     while (!redraw_screen && !game_changed) {  
   or_sr(0x10);	   
     }
-    redrawScreen = 0;
+    redraw_screen = 0;
 
     // Advance current display if
     // game did not change.
