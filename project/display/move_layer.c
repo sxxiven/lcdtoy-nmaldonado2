@@ -11,7 +11,7 @@
 
 u_int bg_color = COLOR_GREEN;
 u_char redraw_screen = 1;
-Region field_ence;
+Region field_fence;
 
 // Playing field
 AbRectOutline field_outline = {
@@ -33,7 +33,7 @@ Layer field_layer = {
  *        corresponding layers.
  * Output: None.
  */
-void mov_layer_sraw(MovLayer *mov_layers, Layer *layers)
+void mov_layer_draw(MovLayer *mov_layers, Layer *layers)
 {
   int row, col;
   MovLayer *mov_layer;
@@ -53,7 +53,7 @@ void mov_layer_sraw(MovLayer *mov_layers, Layer *layers)
     for (row = bounds.topLeft.axes[1]; row <= bounds.botRight.axes[1]; row++) {
       for (col = bounds.topLeft.axes[0]; col <= bounds.botRight.axes[0]; col++) {
 	Vec2 pixel_pos = {col, row};
-	u_int color = bgColor;
+	u_int color = bg_color;
 	Layer *probe_layer;
 	for (probe_layer = layers; probe_layer; 
 	     probe_layer = probe_layer->next) { /* probe all layers, in order */
